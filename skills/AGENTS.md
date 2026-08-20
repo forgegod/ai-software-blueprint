@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Own optional, versioned agent playbooks that contributors can reuse across projects adopting this starter.
+Own optional, versioned agent playbooks that contributors can reuse across projects adopting this blueprint.
 
 ## Ownership
 

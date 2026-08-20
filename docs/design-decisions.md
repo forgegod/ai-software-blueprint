@@ -8,7 +8,7 @@ This document records durable rationale for irreversible forks. It is not the li
 
 ### Context
 
-Earlier editions of this starter bundled a web application, a persistence stack, and a database runtime. The intent is only to hand an AI coding agent and its harness the definition and structure a software project must be maintained under — not to direct its technology.
+Earlier editions of this project bundled a web application, a persistence stack, and a database runtime. The intent is only to hand an AI coding agent and its harness the definition and structure a software project must be maintained under — not to direct its technology.
 
 ### Decision
 

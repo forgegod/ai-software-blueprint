@@ -69,7 +69,7 @@ function write(root, relative, content) {
  * @returns {{root: string, cleanup: () => void}}
  */
 export function createFixtureTree() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "ai-starter-records-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "ai-blueprint-records-"));
   buildValidTree(root);
   return {
     root,

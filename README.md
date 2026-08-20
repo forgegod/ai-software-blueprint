@@ -1,4 +1,4 @@
-# AI Software Starter (blueprint)
+# AI Software Blueprint
 
 A maintenance blueprint for AI-coded software projects. It gives an AI coding agent — with or without an agent harness — the definition and structure a software project has to be maintained under, without giving a technological or architectural direction.
 

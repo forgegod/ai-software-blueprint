@@ -2,7 +2,7 @@
 name: capability-wireframes
 description: Use when a material feature changes a primary human-facing surface and needs a static CAP-linked wireframe.
 version: 1.1.0
-author: App Starter
+author: AI Software Blueprint
 license: MIT
 metadata:
   hermes:

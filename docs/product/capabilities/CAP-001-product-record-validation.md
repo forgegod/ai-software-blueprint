@@ -15,7 +15,7 @@
 ## Rules and boundaries
 
 - The validator is dependency-free and infers nothing about code changes; it enforces structure only.
-- This starter performs no build, lint, or format gate; a product adopting the blueprint adds its own commands to the root `package.json` and CI in the same change.
+- This blueprint performs no build, lint, or format gate; a product adopting it adds its own commands to the root `package.json` and CI in the same change.
 
 ## Verification
 

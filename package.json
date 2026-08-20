@@ -1,5 +1,5 @@
 {
-  "name": "ai-software-starter-blueprint",
+  "name": "ai-software-blueprint",
   "private": true,
   "packageManager": "pnpm@11.17.0",
   "engines": {
