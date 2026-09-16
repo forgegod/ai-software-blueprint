@@ -2,24 +2,31 @@
 
 ## Purpose
 
-Own optional, portable agent workflows for maintaining the canonical capability (CAP) and change-progress (CHG) record structure and the CAP-linked wireframe artifacts.
+Own optional, portable agent workflows for initializing a copied blueprint and maintaining the canonical capability (CAP) and change-progress (CHG) record structure, CAP-linked wireframe artifacts, and CHG-backed phase execution.
 
 ## Ownership
 
 | Path                              | Owns                                                          |
 | --------------------------------- | ------------------------------------------------------------- |
 | `application-records/SKILL.md`    | Canonical CAP/CHG material-change lifecycle and wireframe handoff. |
+| `blueprint-initialization/SKILL.md` | One-time copied-blueprint initialization and cleanup. |
 | `capability-wireframes/SKILL.md`  | Static HTML/PNG wireframes for primary human-facing CAP surfaces. |
+| `phased-plan-design/SKILL.md`     | CHG phase design for material changes and gates. |
+| `phased-plan-execution/SKILL.md`  | One verified CAP/CHG phase at a time. |
+| `phased-plan-overview/SKILL.md`   | Active-CHG inspection and resume selection. |
+| `phased-plan-refactoring/SKILL.md` | Verified CHG splitting and resequencing. |
 
 ## Local Contracts
 
 - These skills use `docs/product/capabilities/CAP-*.md` for current behaviour and `docs/changes/{active,archive}/CHG-*.md` for implementation progress.
 - `capability-wireframes` owns the portable `docs/product/wireframes/` artifact layout. Its HTML and PNG assets illustrate a CAP; implementation and executable tests remain the proof of behaviour.
-- Generic phase sequencing remains owned by the shared `phased-plan-*` skills; these skills decide which CAP and CHG records a material change must maintain.
+- `application-records` decides when CAP/CHG records apply; the packaged `phased-plan-*` skills own their phase design, execution, overview, and restructuring.
+- The active CHG phase table is the only mutable progress authority for material work. Profile-private plans, temporary notes, and tracker checklists do not schedule implementation.
+- `blueprint-initialization` runs only on an explicit adoption request. It removes itself after it replaces the copied blueprint's root rail and proof records; retained CAP/CHG skills serve the initialized project.
 
 ## Work Guidance
 
-Keep the skills complementary: normal material work uses `application-records`; primary human-facing surface work also uses `capability-wireframes`.
+Keep the skills complementary: explicit adoption uses `blueprint-initialization`; normal material work uses `application-records` plus the relevant `phased-plan-*` entry point; primary human-facing surface work also uses `capability-wireframes`. Keep the skills repository-portable: no profile-local paths or harness-only state.
 
 ## Verification
 

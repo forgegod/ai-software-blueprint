@@ -20,6 +20,15 @@
 
 Do not rely on memory. Re-read the applicable DOX chain in the current session before editing.
 
+## Adoption initialization
+
+Only when an operator explicitly asks to initialize a copied blueprint for a
+real project, load `skills/software-development/blueprint-initialization` before
+ordinary project work. It replaces this populated blueprint rail with the
+initial DOX template, establishes project-owned contracts, removes blueprint
+proof records, and then removes its own one-time routing. Do not initialize this
+blueprint repository merely because it contains the framework.
+
 ## Update After Editing
 
 Every meaningful change requires a DOX pass before the task is done.
@@ -92,7 +101,7 @@ Default section order:
 - **Change progress.** `docs/changes/active/CHG-*.md` is the single repository authority for progress on a material requested change. Tickets remain the request/discussion authority, not the implementation-progress or current-behaviour authority.
 - **Material changes.** A material user-visible or operator-visible behaviour change updates the affected CAP, behaviour tests, and active CHG in the same change. A refactor with no observable behaviour change does not create CAP churn.
 - **Receipts.** A completed CHG moves to `docs/changes/archive/` only after its CAP and tests state the merged behaviour. Archived CHGs are implementation receipts, never the current product contract.
-- **Playbooks.** `skills/` ships optional, versioned agent playbooks (product records, capability wireframes). They are execution aids; the DOX contracts remain authoritative.
+- **Playbooks.** `skills/` ships optional, versioned agent playbooks for product records, capability wireframes, and self-contained CHG phase design, execution, overview, and restructuring. They are execution aids; the DOX contracts remain authoritative.
 
 ## Architectural non-goals
 
@@ -133,7 +142,7 @@ An approved architecture change updates, in the same change:
 | `docs/AGENTS.md` | Architecture, product, and change documentation. | Blueprint design, current-capability, or implementation-progress documentation. |
 | `scripts/AGENTS.md` | Record-validation script.                  | The product-record validator, its behaviour, or its test fixtures.                |
 | `.github/AGENTS.md` | Repository-hosted quality automation.     | GitHub Actions workflows or CI policy.                                             |
-| `skills/AGENTS.md` | Versioned optional agent playbooks.        | Repository-shipped agent workflows (product records, capability wireframes).      |
+| `skills/AGENTS.md` | Versioned optional agent playbooks.        | Repository-shipped agent workflows (adoption initialization, product records, CHG phases, capability wireframes). |
 
 ### Root-owned cross-cutting files
 

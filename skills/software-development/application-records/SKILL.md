@@ -1,13 +1,13 @@
 ---
 name: application-records
 description: Use when a material change needs canonical CAP, CHG, decision records, and CAP-linked wireframes for primary human-facing surfaces.
-version: 1.3.0
+version: 1.4.0
 author: Hermes contributors
 license: MIT
 metadata:
   hermes:
     tags: [product, capability, change-records, documentation]
-    related_skills: [capability-wireframes]
+    related_skills: [capability-wireframes, phased-plan-design, phased-plan-execution, phased-plan-overview, phased-plan-refactoring]
 ---
 
 # Application Records
@@ -50,13 +50,30 @@ Read these before changing a record:
 | Change-progress lifecycle | `docs/changes/README.md` and affected `docs/changes/{active,archive}/CHG-*.md`. |
 | Durable cross-cutting decision | `docs/architecture.md`, `docs/privacy.md`, `docs/design-decisions.md`, and equivalent local contracts. |
 
+## Phase sequencing
+
+For a material change, the active CHG is the execution plan. Use the packaged
+phase skills instead of creating a private plan that duplicates CHG progress:
+
+- `phased-plan-design` creates or reshapes the CHG phase table before work.
+- `phased-plan-overview` finds active CHGs and identifies the selected record to
+  resume without relying on commit recency or chat memory.
+- `phased-plan-execution` runs one CHG phase, verifies its gate, and synchronizes
+  its CAP/CHG evidence before the checkpoint.
+- `phased-plan-refactoring` splits or resequences active CHGs only at verified
+  boundaries while preserving one progress authority per request.
+
+For a non-material refactor, use the adopting repository's ordinary planning
+convention. Do not create CAP/CHG churn simply because the work has phases.
+
 ## Procedure
 
 1. **Classify the request.**
    - If it is vague or blocked by unresolved decisions, use Wayfinder only to
      resolve the decision frontier. The tracker map remains discovery material.
    - If it changes material behaviour, identify affected CAP IDs and create or
-     resume one CHG record before implementation.
+     resume one CHG record before implementation. Use `phased-plan-design` for
+     a new CHG or `phased-plan-overview` to select an existing one.
    - If it preserves observable behaviour, state that no CAP/CHG change is
      needed and proceed under the applicable implementation contract.
 
@@ -64,7 +81,8 @@ Read these before changing a record:
    - Follow `docs/changes/README.md`'s canonical shape and lifecycle.
    - Link the external ticket or write `Direct operator request: <verbatim request>`
      when no ticket exists. Never invent a ticket ID.
-   - Set one phase to `in-progress`; include executable verification gates.
+   - Start with executable phase gates. `phased-plan-execution` sets one phase
+     to `in-progress` when it begins that phase.
    - For material work, the tracked CHG is the execution plan. Do not create a
      competing private plan carrying the same progress.
    - For a pending proposal with a primary human-facing surface, keep visual
@@ -94,7 +112,8 @@ Read these before changing a record:
    - Leave short-lived implementation reasoning in the CHG or Git history.
 
 5. **Prove and record progress.**
-   - Run the current phase gate. Mark it done only after it passes.
+   - Run the current phase through `phased-plan-execution`. Mark it done only
+     after its gate passes.
    - Run the project's `records:check` integration plus affected tests and the
      required workspace/release gate for cross-boundary work.
    - Update the CHG before the implementation commit so a new session can resume
@@ -104,7 +123,8 @@ Read these before changing a record:
    - Confirm affected CAPs describe merged behaviour and link executable tests.
    - Run the project's full integration gate.
    - Set the CHG done, move it from `active/` to `archive/`, and retain it as an
-     implementation receipt, not a feature specification.
+     implementation receipt, not a feature specification. Return to
+     `phased-plan-overview` rather than guessing the next active change.
 
 ## Common Pitfalls
 
@@ -122,6 +142,9 @@ Read these before changing a record:
 6. **Premature promotion.** Do not move a CHG review screenshot, Pencil file,
    or planned screen into `docs/product/wireframes/`. Regenerate a CAP-linked
    HTML/PNG pair only when its product surface and evidence exist.
+7. **Parallel progress.** Do not mirror a CHG in a profile-private plan, a
+   temporary note, or a tracker checklist. Add a prerequisite phase or use
+   `phased-plan-refactoring` to make parallel scope explicit.
 
 ## Verification Checklist
 

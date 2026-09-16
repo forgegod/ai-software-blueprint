@@ -78,6 +78,52 @@ test("every SKILL.md name matches its directory", async () => {
   }
 });
 
+test("skills/ packages a self-contained CAP/CHG phase workflow", async () => {
+  const names = [
+    "application-records",
+    "blueprint-initialization",
+    "phased-plan-design",
+    "phased-plan-execution",
+    "phased-plan-overview",
+    "phased-plan-refactoring",
+  ];
+  const sources = new Map();
+  for (const name of names) {
+    const file = path.join(skillsRoot, "software-development", name, "SKILL.md");
+    const source = await readFile(file, "utf8");
+    sources.set(name, source);
+    assert.doesNotMatch(source, /(?:~\/.hermes|\/home\/)/, `${name} depends on agent-private paths`);
+  }
+
+  const records = sources.get("application-records");
+  const phaseSkills = [
+    "phased-plan-design",
+    "phased-plan-execution",
+    "phased-plan-overview",
+    "phased-plan-refactoring",
+  ];
+  for (const name of phaseSkills) {
+    assert.match(records, new RegExp(`\\b${name}\\b`), `application-records does not route to ${name}`);
+  }
+  assert.match(sources.get("phased-plan-design"), /active CHG/i);
+  assert.match(sources.get("phased-plan-execution"), /CHG phase table/i);
+  assert.match(sources.get("phased-plan-overview"), /docs\/changes\/active/i);
+  assert.match(sources.get("phased-plan-refactoring"), /one progress authority/i);
+  assert.match(sources.get("blueprint-initialization"), /templates\/root-AGENTS\.md/);
+  assert.match(sources.get("blueprint-initialization"), /remove itself/i);
+  assert.match(
+    sources.get("blueprint-initialization"),
+    /rewrite the copied root `README\.md`.*project goal/is,
+  );
+  const rootAgent = await readFile(path.join(root, "AGENTS.md"), "utf8");
+  assert.match(rootAgent, /blueprint-initialization/);
+  const initialRoot = await readFile(
+    path.join(skillsRoot, "software-development", "blueprint-initialization", "templates", "root-AGENTS.md"),
+    "utf8",
+  );
+  assert.doesNotMatch(initialRoot, /AI Software Blueprint|CAP-00\d|CHG-00\d/);
+});
+
 test("no repository skill carries credential markers", async () => {
   const files = await skillFiles(skillsRoot);
   const doxFiles = [

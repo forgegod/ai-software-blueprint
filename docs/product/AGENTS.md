@@ -19,6 +19,7 @@ Own the repository's concise, current-state account of material product behaviou
 - A material claim links to the implementation and at least one executable behaviour test. Code and its tests decide a conflict; correct the CAP in the same change.
 - Capability-local decisions belong in the CAP; irreversible or cross-cutting decisions belong in `../design-decisions.md`.
 - A CAP with a primary human-facing surface links its static wireframe HTML and PNG under `## Links` when the wireframe workflow is active; the wireframe illustrates the interface and never replaces behaviour-test evidence.
+- The optional phased-plan skills execute material work through its active CHG; the CAP remains the current-state contract rather than a phase-status surface.
 
 ## Work Guidance
 

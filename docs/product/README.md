@@ -57,7 +57,11 @@ Optional. The blueprint ships no `wireframes/` directory. When a product has a p
 
 ## Hermes integration
 
-This repository ships optional agent playbooks under `../../skills/`. Hermes discovers them only when the checkout's skill directory is configured as an external skill directory, for example:
+This repository ships optional agent playbooks under `../../skills/`. They include
+the CAP/CHG lifecycle, capability wireframes, and a self-contained phase workflow:
+design, execute, inspect, or restructure an active CHG without a profile-private
+progress plan. Hermes discovers them only when the checkout's skill directory is
+configured as an external skill directory, for example:
 
 ```yaml
 skills:

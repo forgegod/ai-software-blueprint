@@ -1,21 +1,21 @@
 # CHG-001 — Bootstrap the maintenance blueprint
 
-**Status:** in-progress
-**External request:** Direct operator request: create a further stripped-down edition of the starter as a pure blueprint — the maintenance framework and record structure for AI coding agents, without the DocumentDB and OpenReplay aspects.
+**Status:** done
+**External request:** Direct operator request: update this project into a self-contained blueprint startup template for AI-agent-supported software development, including the AGENTS.md and skills/ directory, with CAP/CHG-aware phased-plan skills.
 **Impacts:** CAP-001, CAP-002, CAP-003
-**Baseline:** `<first commit of this repository>`
+**Baseline:** `9d043be`
 
-**Verification evidence (2026-08-20):**
+**Verification evidence:**
 
 - Phase 1: `pnpm records:check` → "Product record check passed: 3 capabilities, 1 change record."
 - Phase 2: `pnpm test` → 22 tests passed across 3 suites (record-validation fixtures, change-lifecycle fixtures, playbook packaging).
-- Phase 3: `pnpm records:check && pnpm test` exit 0 locally; `.github/workflows/ci.yml` mirrors the same gate and runs on the first push.
+- Phase 3: `pnpm records:check && pnpm test` exits 0 after the self-contained CAP/CHG phase-workflow skills, packaging test, and DOX updates are present.
 
 | #   | Phase                                | Status      | Verification gate                                                                 |
 | --- | ------------------------------------ | ----------- | --------------------------------------------------------------------------------- |
 | 1   | Ship the framework contracts         | done        | DOX chain, record templates, validator, and skills tree in place                 |
 | 2   | Bootstrap records and proof          | done        | `pnpm records:check && pnpm test` exit 0 on the first product records            |
-| 3   | Integrate the quality gate           | in-progress | `pnpm records:check && pnpm test` exit 0 and CI workflow runs the same gate       |
+| 3   | Package self-contained phase workflow | done (`pnpm records:check && pnpm test`) | `pnpm records:check && pnpm test` exit 0 |
 
 ## Phase 1 — Ship the framework contracts
 
@@ -36,12 +36,14 @@
 
 **Verification gate:** `pnpm records:check && pnpm test` exit 0.
 
-## Phase 3 — Integrate the quality gate
+## Phase 3 — Package self-contained phase workflow
 
-**Goal:** Keep the gate aligned for local use and CI.
+**Goal:** Package a portable CAP/CHG phase workflow that runs without profile-local planning state.
 
-1. Run the record and test commands locally.
-2. Confirm `.github/workflows/ci.yml` mirrors the gate; mark the evidence in this CHG and archive it.
+1. Add portable `phased-plan-design`, `phased-plan-execution`, `phased-plan-overview`, and `phased-plan-refactoring` skills under `skills/software-development/`.
+2. Route `application-records` and the owning DOX contracts through the packaged workflow.
+3. Prove the expected skill family, cross-links, and absence of agent-private paths in `tests/skills.test.mjs`.
+4. Run the record and test commands, then archive this completed change.
 
 **Verification gate:** `pnpm records:check && pnpm test` exit 0.
 

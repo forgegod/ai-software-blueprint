@@ -60,7 +60,23 @@ A local implementation choice belongs in the affected CAP only if it constrains 
 
 ## Hermes integration
 
-The optional `application-records` skill drives this lifecycle for Hermes agents. When a material change uses this repository's records, the active CHG file is the tracked execution plan rather than a profile-private plan.
+The optional `application-records` and `phased-plan-*` skills drive this lifecycle
+for Hermes agents. `phased-plan-design` creates CHG phases; execution, overview,
+and refactoring operate on repository CHGs. When a material change uses this
+repository's records, the active CHG file is the tracked execution plan rather
+than a profile-private plan.
+
+## Current records
+
+No change record is active.
+
+## Archive
+
+| Change | Status |
+| --- | --- |
+| [CHG-003 — Project-goal README during initialization](archive/CHG-003-project-goal-readme-initialization.md) | done |
+| [CHG-002 — Initialize an adopted blueprint](archive/CHG-002-initialize-adopted-blueprint.md) | done |
+| [CHG-001 — Bootstrap the maintenance blueprint](archive/CHG-001-bootstrap-maintenance-blueprint.md) | done |
 
 ## Verification
 

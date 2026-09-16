@@ -11,7 +11,7 @@ It ships no application code, no framework, and no persistence runtime. The prod
 - The **DOX hierarchy**: root `AGENTS.md` plus child contracts that stay binding at every depth. The hierarchy is the structure an AI coding agent complies with on every change.
 - The **record system**: CAP capability contracts for current behaviour, CHG change records for progress, and lifecycle rules that keep them apart.
 - The **record validator**: a dependency-free `node` script that enforces record structure, lifecycle placement, reference integrity, and local link integrity.
-- The **agent playbooks**: optional, versioned execution aids under `skills/`.
+- The **agent playbooks**: optional, versioned execution aids under `skills/`, including a self-contained CAP/CHG phase-workflow family that keeps active CHGs as progress authority.
 - The **quality gate**: local scripts and a credential-free CI workflow.
 
 The blueprint's own product surface is that machinery: its CAPs describe the record-validation and lifecycle pipeline, and the `node:test` suites under `tests/` prove it.
@@ -45,11 +45,28 @@ pnpm test
 
 ## Adoption
 
-Adopting a product project copies the framework, then records the product's own behaviour:
+Copying is not initialization. After the copy, explicitly ask the agent to
+initialize the blueprint for the real project. The one-time initializer performs
+this boundary:
 
-1. Copy the DOX chain (`AGENTS.md` files), `docs/`, `scripts/`, `skills/`, `package.json`, `.github/`, and `README.md` conventions.
-2. Replace the blueprint CAPs with the product's capability contracts, each backed by the product's implementation paths and executable tests.
-3. Point `pnpm records:check` at the product's record roots (the script accepts an optional root argument; the default is the repository root).
-4. Add the product's own verification commands to the root `package.json` and to `.github/workflows/ci.yml`, and re-state them in the root `AGENTS.md` → Workspace verification.
-5. When the product has a primary human-facing surface, activate the wireframe workflow: add `docs/product/wireframes/` (generator, manifest, index, HTML/PNG pairs) and link them from the qualifying CAPs.
-6. Keep `docs/design-decisions.md` for the product's irreversible forks; the blueprint's own decisions stay scoped to the framework.
+1. Start the target root from the initial DOX template, scan the real source
+   tree, and fill its project guidance, verification commands, and Child DOX
+   Index. Do not retain this repository's populated root rail.
+2. Keep and adapt the reusable framework: the DOX core, generic CAP/CHG lifecycle
+   documentation, and CAP/CHG phase skills.
+3. Rewrite the copied root README from the project's source-backed goal: name the
+   project purpose, intended users, actual setup/run/verification commands, and
+   current documentation links. Replace architecture, decisions, package
+   configuration, and CI with the actual project's contracts and tooling. A
+   copied Node validator or test runner is retained only when it fits the
+   project's toolchain.
+4. Remove this repository's CAPs, bootstrap CHGs, index rows, and proof-only
+   tests/fixtures. Create product CAPs only for known current behaviour with
+   implementation and executable evidence; create CHGs only for actual material
+   product requests.
+5. When the product has a primary human-facing surface, activate the wireframe
+   workflow: add `docs/product/wireframes/` (generator, manifest, index,
+   HTML/PNG pairs) and link them from the qualifying CAPs.
+6. Remove the one-time initializer, its routing, and tests that require it once
+   the target has a project-owned DOX tree. Future agents continue through the
+   initialized contracts and retained generic skills.

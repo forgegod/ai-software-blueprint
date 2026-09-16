@@ -18,12 +18,14 @@ Own repository-tracked implementation progress for requested changes without bec
 - Every CHG names its external request, affected CAP IDs, baseline, and executable phase gates.
 - Only `planned`, `in-progress`, or `blocked` records belong in `active/`; only `done` or `cancelled` records belong in `archive/`.
 - A CHG is complete only after affected CAPs and tests describe the merged behaviour. Archive it rather than using it to describe the repository.
+- The optional phase-workflow skills operate on the CHG phase table; they do not create a second mutable progress authority.
 
 ## Work Guidance
 
 - Create one CHG for a material change before implementation begins. Keep it small enough for a coherent vertical slice; use explicit dependencies when splitting is necessary.
 - Update phase state and evidence only after the corresponding gate passes.
 - Do not duplicate ticket discussion, capability prose, or ADR rationale in a CHG. Link the authoritative artifact.
+- Use `phased-plan-overview` to select active work, `phased-plan-execution` for one phase, and `phased-plan-refactoring` only for a verified split or resequencing.
 - Read `README.md` before creating, splitting, completing, or archiving a CHG.
 
 ## Verification

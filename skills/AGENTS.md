@@ -8,7 +8,7 @@ Own optional, versioned agent playbooks that contributors can reuse across proje
 
 | Path                  | Owns                                                          |
 | --------------------- | ------------------------------------------------------------- |
-| `software-development/` | Product-record and capability-wireframe playbooks.           |
+| `software-development/` | Blueprint initialization, product-record, wireframe, and CAP/CHG phase-workflow playbooks. |
 
 ## Local Contracts
 
@@ -29,6 +29,6 @@ Run the adopting project's declared documentation and record checks, validate ch
 
 | Child                            | Owns                                          | Read when editing…                                     |
 | -------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
-| `software-development/AGENTS.md` | Product-record and wireframe workflow skills. | Capability/change-record workflows or wireframe output. |
+| `software-development/AGENTS.md` | Blueprint initialization, product-record, wireframe, and phase-workflow skills. | Adoption initialization, capability/change-record workflows, CHG sequencing, or wireframe output. |
 
 Parent contract: `../AGENTS.md`.
