@@ -74,9 +74,23 @@ No change record is active.
 
 | Change | Status |
 | --- | --- |
+| [CHG-004 — Review artifact placement and wireframe handoff](archive/CHG-004-review-artifact-lifecycle.md) | done |
 | [CHG-003 — Project-goal README during initialization](archive/CHG-003-project-goal-readme-initialization.md) | done |
 | [CHG-002 — Initialize an adopted blueprint](archive/CHG-002-initialize-adopted-blueprint.md) | done |
 | [CHG-001 — Bootstrap the maintenance blueprint](archive/CHG-001-bootstrap-maintenance-blueprint.md) | done |
+
+## Review packages
+
+Keep `active/` and `archive/` flat and record-only: each entry is a `CHG-<number>-<slug>.md` file. Put proposal HTML, PNGs, design sources, and Markdown notes in an optional `reviews/CHG-<number>/` package instead, using the exact owning CHG ID. Do not create empty package scaffolding.
+
+- The package requires `README.md` with the literal field `**Status:** review-only`. Use that README as the review entry point and link its artifacts; visible proposal pages should also say review-only. Filenames inside the package need not use a CHG prefix, and supporting subdirectories are allowed.
+- The owning active or archived CHG links the package README with a relative Markdown link targeting `../reviews/CHG-<number>/README.md`. The package directory names its owner; the README is a label and entry point, not another progress record.
+- The validator rejects malformed or unowned packages, missing README labels, and missing owner links. It checks local links in every package Markdown file without parsing or counting those files as CHGs.
+- CAPs never link review-package files, and proposals never enter the product wireframe manifest. Read both product and change DOX, plus the wireframe child if present, before choosing where to write a visual artifact.
+
+On implementation, add or update the affected CAPs and regenerate their canonical HTML/PNG pairs through the [product wireframe workflow](../product/README.md#wireframes). A proposal is not promoted by moving its files. The CHG's visual handoff gate names the generator, renderer, affected CAPs, and tests; it also verifies honest `Primary surface` declarations and current renders, which structural validation cannot prove.
+
+On `done` or `cancelled` closure, keep the review package at its same path as a frozen review-only receipt. Repair references when archiving the owner; do not move packages into `archive/` or the product tree. For cancellation, retain the review without claiming implementation. If an owner is removed, remove its package and repair inbound links. A scope split assigns each package exactly one owner and updates its ID/path and references when ownership changes; do not duplicate mutable progress.
 
 ## Verification
 

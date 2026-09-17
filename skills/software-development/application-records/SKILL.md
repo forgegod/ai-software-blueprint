@@ -1,7 +1,7 @@
 ---
 name: application-records
 description: Use when a material change needs canonical CAP, CHG, decision records, and CAP-linked wireframes for primary human-facing surfaces.
-version: 1.4.0
+version: 1.5.0
 author: Hermes contributors
 license: MIT
 metadata:
@@ -22,8 +22,9 @@ proof of behaviour.
 This skill defines the portable canonical layout:
 
 - `docs/product/capabilities/CAP-*.md` for current behaviour;
-- `docs/changes/active/CHG-*.md` for active progress; and
-- `docs/changes/archive/CHG-*.md` for completed implementation receipts.
+- `docs/changes/active/CHG-*.md` for active progress;
+- `docs/changes/archive/CHG-*.md` for completed implementation receipts; and
+- `docs/changes/reviews/CHG-<number>/` for optional review packages, never a second progress authority.
 
 Projects adopting this skill use these names and paths. Their contributor
 instructions supply product-specific policy, tests, and validation commands.
@@ -85,10 +86,12 @@ convention. Do not create CAP/CHG churn simply because the work has phases.
      to `in-progress` when it begins that phase.
    - For material work, the tracked CHG is the execution plan. Do not create a
      competing private plan carrying the same progress.
-   - For a pending proposal with a primary human-facing surface, keep visual
-     review artifacts under the CHG. Do not allocate a future CAP ID or add the
-     proposal to the product wireframe manifest: those surfaces describe current
-     implementation only.
+   - Before choosing a visual destination, read both product and change DOX and
+     the wireframe child if present. Keep pending proposal assets and design notes
+     in `docs/changes/reviews/CHG-<number>/`, not beside active/archive records.
+     Link its `README.md` from the owner; the README declares `**Status:** review-only`
+     and links the artifacts. Do not allocate a future CAP ID or add a proposal
+     to the product manifest. Follow `docs/changes/README.md` for package lifecycle.
 
 3. **Make current behaviour explicit.**
    - Add or amend the affected CAP in the same vertical slice as implementation
@@ -97,11 +100,11 @@ convention. Do not create CAP/CHG churn simply because the work has phases.
      privacy/security contracts instead of copying their rules.
    - If code/tests contradict the CAP, fix the code or CAP before
      completion; do not leave an ambiguous claim.
-   - When the capability adds or changes a primary human-facing surface, load
-     `capability-wireframes`. At implementation, create the CAP-linked static
-     HTML/PNG pair, manifest entry, and index link in the same vertical slice as
-     the runtime surface and behavior tests. The wireframe illustrates the
-     interface but does not replace behavior-test evidence.
+   - Every CAP declares `**Primary surface:** human` or `none`. For new or existing
+     human-facing CAPs, load `capability-wireframes` and update the canonical
+     generator, regenerate HTML, render PNG, and synchronize manifest/index/CAP
+     links in the same slice as the changed interaction and behavior tests.
+     Review packages are never promoted by simply moving their files.
 
 4. **Place decisions correctly.**
    - Record a capability-local rule in its CAP only when it changes how the
@@ -121,6 +124,13 @@ convention. Do not create CAP/CHG churn simply because the work has phases.
 
 6. **Close the change.**
    - Confirm affected CAPs describe merged behaviour and link executable tests.
+   - Complete the visual handoff gate: current canonical HTML/PNG for affected
+     human-facing CAPs, honest `none` declarations elsewhere, and generation,
+     rendering, and visual inspection evidence in the CHG. Inventory checks alone
+     do not establish render freshness or correct surface classification.
+   - Retain review packages at their same paths as frozen review-only receipts
+     for done or cancelled owners. Repair links on archive; remove packages when
+     their owners are removed. Cancellation does not claim implementation.
    - Run the project's full integration gate.
    - Set the CHG done, move it from `active/` to `archive/`, and retain it as an
      implementation receipt, not a feature specification. Return to
@@ -151,8 +161,8 @@ convention. Do not create CAP/CHG churn simply because the work has phases.
 - [ ] Every material changed behaviour has an affected CAP and behaviour-test evidence.
 - [ ] Every qualifying primary human-facing surface has a current CAP-linked
       HTML and PNG wireframe.
-- [ ] Pending CHG review artifacts are not listed in the product wireframe
-      manifest and do not claim unimplemented CAP IDs.
+- [ ] Review packages have an owning CHG, a linked review-only README, and valid
+      artifact links; no CAP or product manifest references their files.
 - [ ] Every active material request has exactly one CHG progress authority.
 - [ ] Every CHG references its source request and valid CAP IDs.
 - [ ] The project's `records:check` integration exits 0.

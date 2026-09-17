@@ -70,8 +70,8 @@ function sectionFileRefs(source, heading, filter) {
 }
 
 /** @param {string} directory */
-async function markdownFiles(directory) {
-  const entries = await readdir(directory, { withFileTypes: true }).catch(
+async function directoryEntries(directory) {
+  return readdir(directory, { withFileTypes: true }).catch(
     (error) => {
       if (error && typeof error === "object" && error.code === "ENOENT") {
         return [];
@@ -79,6 +79,11 @@ async function markdownFiles(directory) {
       throw error;
     },
   );
+}
+
+/** @param {string} directory */
+async function markdownFiles(directory) {
+  const entries = await directoryEntries(directory);
   const files = [];
   for (const entry of entries) {
     const file = path.join(directory, entry.name);
@@ -91,9 +96,22 @@ async function markdownFiles(directory) {
   return files.sort();
 }
 
+/** Active/archive folders are flat record inventories, never asset stores. */
+async function changeRecordFiles(directory, root, errors) {
+  const files = [];
+  for (const entry of await directoryEntries(directory)) {
+    if (entry.isFile() && /^CHG-\d+-[a-z0-9-]+\.md$/.test(entry.name)) {
+      files.push(path.join(directory, entry.name));
+    } else {
+      errors.push(`${path.relative(root, directory)} contains non-record entry: ${entry.name}; use docs/changes/reviews/CHG-<number>/ for review artifacts`);
+    }
+  }
+  return files.sort();
+}
+
 /** @param {string} source @param {string} label */
 function requiredField(source, label) {
-  const match = source.match(
+  const match = withoutCodeFences(source).match(
     new RegExp(`^\\*\\*${label}:\\*\\*\\s*(.+?)\\s*$`, "m"),
   );
   return match?.[1]?.trim() ?? null;
@@ -101,9 +119,10 @@ function requiredField(source, label) {
 
 /** @param {string} source @param {string} heading */
 function section(source, heading) {
-  const marker = `## ${heading}`;
-  const start = source.indexOf(marker);
-  if (start < 0) return null;
+  source = withoutCodeFences(source);
+  const match = source.match(new RegExp(`^## ${heading}[ \\t]*\\r?$`, "m"));
+  if (!match) return null;
+  const start = match.index;
 
   const afterHeading = source.indexOf("\n", start);
   if (afterHeading < 0) return "";
@@ -112,26 +131,32 @@ function section(source, heading) {
   return nextHeading < 0 ? remainder : remainder.slice(0, nextHeading);
 }
 
+function withoutCodeFences(source) {
+  return source.replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, "");
+}
+
+function localMarkdownTargets(source) {
+  return [...withoutCodeFences(source).matchAll(/\]\(([^)]+)\)/g)]
+    .map(match => match[1].trim().replace(/^<|>$/g, ""))
+    .filter(target => target && !target.startsWith("#") && !/^(?:https?:|mailto:)/.test(target))
+    .map(target => target.split("#", 1)[0]);
+}
+
+function localMarkdownPaths(source, file) {
+  return localMarkdownTargets(source).map(target => path.resolve(path.dirname(file), target));
+}
+
+function isWithin(directory, file) {
+  const relative = path.relative(directory, file);
+  return relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+}
+
 /** @param {string} file @param {string} root @param {string[]} errors */
 async function validateLocalMarkdownLinks(file, root, errors) {
   const source = await readFile(file, "utf8");
-  const prose = source.replace(/```[\s\S]*?```/g, "");
-  for (const match of prose.matchAll(/\]\(([^)]+)\)/g)) {
-    const target = match[1].trim().replace(/^<|>$/g, "");
-    if (
-      !target ||
-      target.startsWith("#") ||
-      /^(?:https?:|mailto:)/.test(target)
-    ) {
-      continue;
-    }
-
-    const targetPath = target.split("#", 1)[0];
-    if (!targetPath) continue;
-
-    const resolved = path.resolve(path.dirname(file), targetPath);
-    const relative = path.relative(root, resolved);
-    if (relative.startsWith("..") || path.isAbsolute(relative)) {
+  for (const target of localMarkdownTargets(source)) {
+    const resolved = path.resolve(path.dirname(file), target);
+    if (!isWithin(root, resolved)) {
       errors.push(
         `${path.relative(root, file)} links outside the repository: ${target}`,
       );
@@ -158,10 +183,12 @@ export async function validateRecords(root) {
   const changesRoot = path.join(root, "docs", "changes");
   const activeChangesRoot = path.join(changesRoot, "active");
   const archiveChangesRoot = path.join(changesRoot, "archive");
+  const reviewsRoot = path.join(changesRoot, "reviews");
   const wireframesRoot = path.join(productRoot, "wireframes");
 
   const capabilityFiles = await markdownFiles(capabilitiesRoot);
   const capabilityIds = new Set();
+  const capabilities = new Map();
 
   for (const file of capabilityFiles) {
     const relative = path.relative(root, file);
@@ -170,6 +197,14 @@ export async function validateRecords(root) {
     const filenameMatch = filename.match(/^(CAP-\d+)-[a-z0-9-]+\.md$/);
     const titleMatch = source.match(/^# (CAP-\d+) — .+$/m);
     const status = requiredField(source, "Status");
+    const surface = requiredField(source, "Primary surface");
+    if (!["human", "none"].includes(surface)) {
+      errors.push(`${relative} has invalid primary surface '${surface ?? "missing"}'; use human or none`);
+    }
+    if (titleMatch) capabilities.set(titleMatch[1], { file, source, surface });
+    if (localMarkdownPaths(source, file).some(target => isWithin(reviewsRoot, target))) {
+      errors.push(`${relative} must not link review artifacts; link current CAP wireframes instead`);
+    }
 
     if (!filenameMatch) {
       errors.push(`${relative} must use CAP-<number>-<slug>.md`);
@@ -243,16 +278,17 @@ export async function validateRecords(root) {
   }
 
   const changeFiles = [
-    ...(await markdownFiles(activeChangesRoot)).map((file) => ({
+    ...(await changeRecordFiles(activeChangesRoot, root, errors)).map((file) => ({
       file,
       place: "active",
     })),
-    ...(await markdownFiles(archiveChangesRoot)).map((file) => ({
+    ...(await changeRecordFiles(archiveChangesRoot, root, errors)).map((file) => ({
       file,
       place: "archive",
     })),
   ];
   const changeIds = new Set();
+  const changes = new Map();
 
   for (const { file, place } of changeFiles) {
     const relative = path.relative(root, file);
@@ -278,6 +314,7 @@ export async function validateRecords(root) {
       errors.push(`${relative} duplicates change ID ${titleMatch[1]}`);
     }
     if (titleMatch) changeIds.add(titleMatch[1]);
+    if (titleMatch) changes.set(titleMatch[1], { file, source });
 
     const validStatuses =
       place === "active" ? activeChangeStatuses : archivedChangeStatuses;
@@ -324,6 +361,32 @@ export async function validateRecords(root) {
     await validateLocalMarkdownLinks(file, root, errors);
   }
 
+  for (const entry of await directoryEntries(reviewsRoot)) {
+    const directory = path.join(reviewsRoot, entry.name);
+    const relative = path.relative(root, directory);
+    if (!entry.isDirectory() || !/^CHG-\d+$/.test(entry.name)) {
+      errors.push(`${relative} must be a CHG-<number> review directory`);
+      continue;
+    }
+    const owner = changes.get(entry.name);
+    if (!owner) errors.push(`${relative} has no owning CHG`);
+    const readme = path.join(directory, "README.md");
+    if (!(await stat(readme).catch(() => null))?.isFile()) {
+      errors.push(`${relative} requires README.md`);
+    } else {
+      const source = await readFile(readme, "utf8");
+      if (requiredField(source, "Status") !== "review-only") {
+        errors.push(`${relative}/README.md must declare Status: review-only`);
+      }
+    }
+    if (owner && !localMarkdownPaths(owner.source, owner.file).includes(readme)) {
+      errors.push(`${path.relative(root, owner.file)} must link its review package README.md`);
+    }
+    for (const file of await markdownFiles(directory)) {
+      await validateLocalMarkdownLinks(file, root, errors);
+    }
+  }
+
   for (const file of [
     path.join(productRoot, "README.md"),
     path.join(productRoot, "index.md"),
@@ -345,37 +408,56 @@ export async function validateRecords(root) {
     }
   }
 
-  // Optional wireframe inventory: when a product activates the wireframe
-  // workflow, docs/product/wireframes/manifest.json must match the on-disk
-  // html/ and exports/ pairs, index.html must link every manifest screen, and
-  // each CAP's `## Links` section must point at the same HTML and PNG paths.
+  // Explicit surface declarations activate the workflow even without a manifest.
   let manifest = false;
   const manifestPath = path.join(wireframesRoot, "manifest.json");
   const manifestInfo = await stat(manifestPath).catch(() => null);
+  const humanCapabilities = [...capabilities].filter(([, cap]) => cap.surface === "human");
+  const wireframesInfo = await stat(wireframesRoot).catch(() => null);
+  if (humanCapabilities.length > 0 || wireframesInfo) {
+    for (const name of ["manifest.json", "generate.mjs", "index.html"]) {
+      if (!(await stat(path.join(wireframesRoot, name)).catch(() => null))?.isFile()) {
+        errors.push(`docs/product/wireframes/${name} is required for the wireframe workflow`);
+      }
+    }
+  }
   if (manifestInfo?.isFile()) {
     manifest = true;
     let parsed;
     try {
       parsed = JSON.parse(await readFile(manifestPath, "utf8"));
     } catch {
-      parsed = null;
       errors.push("docs/product/wireframes/manifest.json is not valid JSON");
     }
     if (parsed && Array.isArray(parsed.screens)) {
-      const listedHtml = new Set();
+      const listedIds = new Set();
+      const listedArtifacts = new Set();
+      const indexSource = await readFile(path.join(wireframesRoot, "index.html"), "utf8").catch(() => "");
+      const indexLinks = [...indexSource.replace(/<!--[\s\S]*?-->/g, "").matchAll(/<a\b[^>]*\bhref\s*=\s*["']([^"']+)["']/gi)]
+        .map(match => match[1]);
       for (const screen of parsed.screens) {
-        const id = typeof screen.id === "string" ? screen.id : "";
+        const id = typeof screen?.id === "string" ? screen.id : "";
         if (!/^CAP-\d+$/.test(id)) {
           errors.push(
             `wireframe manifest screen must carry a CAP-<number> id: ${JSON.stringify(screen)}`,
           );
           continue;
         }
+        if (listedIds.has(id)) errors.push(`wireframe manifest duplicates capability ${id}`);
+        listedIds.add(id);
         if (!capabilityIds.has(id)) {
           errors.push(`wireframe manifest lists unknown capability ${id}`);
+        } else if (capabilities.get(id).surface !== "human") {
+          errors.push(`wireframe capability ${id} must declare Primary surface: human`);
         }
-        const htmlPattern = new RegExp(`^html/${id}-[a-z0-9-]+\\\.html$`);
-        const pngPattern = new RegExp(`^exports/${id}-[a-z0-9-]+\\\.png$`);
+        if (typeof screen.title !== "string" || !screen.title.trim()) {
+          errors.push(`wireframe manifest ${id} must have a non-empty title`);
+        }
+        if (![screen.viewport?.width, screen.viewport?.height].every(value => Number.isInteger(value) && value > 0)) {
+          errors.push(`wireframe manifest ${id} must have a positive integer viewport width and height`);
+        }
+        const htmlPattern = new RegExp(`^html/${id}-[a-z0-9-]+\\.html$`);
+        const pngPattern = new RegExp(`^exports/${id}-[a-z0-9-]+\\.png$`);
         for (const [artifact, pattern, label] of [
           [screen.html, htmlPattern, "html"],
           [screen.png, pngPattern, "png"],
@@ -386,6 +468,7 @@ export async function validateRecords(root) {
             );
             continue;
           }
+          listedArtifacts.add(artifact);
           const info = await stat(
             path.join(wireframesRoot, artifact),
           ).catch(() => null);
@@ -393,58 +476,43 @@ export async function validateRecords(root) {
             errors.push(`wireframe manifest lists missing artifact: ${artifact}`);
           }
         }
-        listedHtml.add(screen.html);
-        const capFile = capabilityFiles.find(
-          (file) => path.basename(file).startsWith(`${id}-`),
-        );
-        if (capFile) {
-          const source = await readFile(capFile, "utf8");
-          const capLinks = [...source.matchAll(/\]\(([^)]+)\)/g)]
-            .map((match) => match[1].split("#", 1)[0].trim())
-            .filter((target) => target && !/^(?:https?:|mailto:)/.test(target))
-            .map((target) =>
-              path.relative(
-                wireframesRoot,
-                path.resolve(path.dirname(capFile), target),
-              ),
-            );
+        if (typeof screen.html === "string" && typeof screen.png === "string" &&
+            path.basename(screen.html, ".html") !== path.basename(screen.png, ".png")) {
+          errors.push(`wireframe manifest ${id} HTML and PNG names must match`);
+        }
+        const cap = capabilities.get(id);
+        if (cap) {
+          const capLinks = localMarkdownPaths(section(cap.source, "Links") ?? "", cap.file)
+            .map(target => path.relative(wireframesRoot, target).split(path.sep).join("/"));
           const missing = [screen.html, screen.png].filter(
             (artifact) => !capLinks.includes(artifact),
           );
           if (missing.length > 0) {
             errors.push(
-              `${path.relative(root, capFile)} must link its wireframe HTML and PNG (${missing.join(", ")})`,
+              `${path.relative(root, cap.file)} must link its wireframe HTML and PNG under ## Links (${missing.join(", ")})`,
             );
           }
         }
-      }
-      const htmlDir = path.join(wireframesRoot, "html");
-      const htmlFiles = (await readdir(htmlDir).catch(() => []))
-        .filter((file) => /^CAP-\d+-[a-z0-9-]+\.html$/.test(file))
-        .map((file) => `html/${file}`);
-      for (const file of htmlFiles) {
-        if (!listedHtml.has(file)) {
-          errors.push(
-            `wireframe html artifact is missing from the manifest: ${file}`,
-          );
+        if (!indexLinks.includes(screen.html)) {
+          errors.push(`wireframe index.html must link ${screen.html}`);
         }
       }
-      const indexFile = path.join(wireframesRoot, "index.html");
-      const indexInfo = await stat(indexFile).catch(() => null);
-      if (indexInfo?.isFile()) {
-        const indexSource = await readFile(indexFile, "utf8");
-        for (const screen of parsed.screens) {
-          if (
-            typeof screen.html === "string" &&
-            !indexSource.includes(screen.html)
-          ) {
-            errors.push(`wireframe index.html must link ${screen.html}`);
+      for (const [id] of humanCapabilities) {
+        if (!listedIds.has(id)) {
+          errors.push(`wireframe manifest must list primary-surface capability ${id}`);
+        }
+      }
+      for (const [directory, extension] of [["html", "html"], ["exports", "png"]]) {
+        for (const entry of await directoryEntries(path.join(wireframesRoot, directory))) {
+          const artifact = `${directory}/${entry.name}`;
+          if (!entry.isFile() || !new RegExp(`^CAP-\\d+-[a-z0-9-]+\\.${extension}$`).test(entry.name)) {
+            errors.push(`invalid wireframe artifact: ${artifact}`);
+          } else if (!listedArtifacts.has(artifact)) {
+            errors.push(`wireframe ${extension} artifact is missing from the manifest: ${artifact}`);
           }
         }
-      } else {
-        errors.push("docs/product/wireframes/index.html is required with a manifest");
       }
-    } else if (parsed) {
+    } else if (parsed !== undefined) {
       errors.push("wireframe manifest must contain a `screens` array");
     }
   }

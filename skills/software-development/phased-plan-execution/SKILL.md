@@ -1,7 +1,7 @@
 ---
 name: phased-plan-execution
 description: Use when executing one CAP/CHG-backed phase and keeping the active change record synchronized with verified work.
-version: 1.0.0
+version: 1.1.0
 author: AI Software Blueprint
 license: MIT
 metadata:
@@ -40,12 +40,18 @@ a CHG lifecycle onto a refactor with no observable outcome.
 3. Read definitions, usages, local contracts, and focused tests before editing.
    Implement the phase's complete vertical slice: behaviour, CAP delta, and
    executable evidence belong together when the outcome is material.
+   For visual work, read both product/change DOX and the wireframe child if present.
+   Keep proposals in the CHG review package. Use `capability-wireframes` for the
+   visual handoff of new and existing CAPs: update canonical generator definitions,
+   regenerate HTML, render PNG, and synchronize CAP/manifest/index links.
 4. Classify a new finding immediately. Add required-now work to this phase or add
    a prerequisite phase before changing source. Route an independent scope split
    through `phased-plan-refactoring`. Do not preserve actionable work only in
    chat, temporary files, or a profile-private plan.
 5. Run the phase gate. It includes the affected tests and every project check the
    phase names. Fix resolvable failures before proceeding.
+   A visual handoff gate includes generation, rendering, and visual inspection;
+   record validation alone cannot prove current renders or honest surface metadata.
 6. After the gate passes, update the CHG row to `done (<evidence>)`. Update the
    CAP in the same reviewed slice whenever current behaviour changed. Do not mark
    a row done because edits merely look complete.
@@ -56,6 +62,12 @@ a CHG lifecycle onto a refactor with no observable outcome.
    next execution cycle. When the final gate passes, set the CHG status `done`,
    move it to `docs/changes/archive/`, refresh the change index, and hand control
    to `phased-plan-overview` rather than guessing the next request.
+   Before closure, confirm human-facing CAPs have current canonical HTML/PNG and
+   other CAPs honestly declare `Primary surface: none`. Retain any review package
+   at `docs/changes/reviews/CHG-<number>/` as a frozen review-only receipt; repair
+   owner links rather than moving its assets into active/archive or the product
+   tree. Apply the same retention rule to cancelled changes without claiming
+   implementation; removing an owner also removes its package.
 
 ## CAP/CHG invariants
 

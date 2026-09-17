@@ -19,7 +19,7 @@ Own optional, portable agent workflows for initializing a copied blueprint and m
 ## Local Contracts
 
 - These skills use `docs/product/capabilities/CAP-*.md` for current behaviour and `docs/changes/{active,archive}/CHG-*.md` for implementation progress.
-- `capability-wireframes` owns the portable `docs/product/wireframes/` artifact layout. Its HTML and PNG assets illustrate a CAP; implementation and executable tests remain the proof of behaviour.
+- `capability-wireframes` owns the portable canonical `docs/product/wireframes/` layout and explicit CAP surface declarations. Review packages stay separate under `docs/changes/reviews/CHG-<number>/`; `application-records` and the phase skills maintain their ownership, implementation handoff, and stable-path retention. Visual artifacts never replace executable behavior evidence.
 - `application-records` decides when CAP/CHG records apply; the packaged `phased-plan-*` skills own their phase design, execution, overview, and restructuring.
 - The active CHG phase table is the only mutable progress authority for material work. Profile-private plans, temporary notes, and tracker checklists do not schedule implementation.
 - `blueprint-initialization` runs only on an explicit adoption request. It removes itself after it replaces the copied blueprint's root rail and proof records; retained CAP/CHG skills serve the initialized project.

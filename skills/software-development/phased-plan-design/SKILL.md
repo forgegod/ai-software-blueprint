@@ -1,7 +1,7 @@
 ---
 name: phased-plan-design
 description: Use when designing a phased plan and a material change must use a CAP/CHG record as its progress authority.
-version: 1.0.0
+version: 1.1.0
 author: AI Software Blueprint
 license: MIT
 metadata:
@@ -39,9 +39,16 @@ phase structure; `phased-plan-execution` performs a selected phase.
    execution begins.
 4. Make each phase a restart-safe vertical slice. A row needs a concrete result,
    an owned file or behaviour boundary, and an executable verification gate.
+   For a changed primary visual surface, define the visual handoff: affected new
+   or existing CAPs, canonical generator and rendering commands, HTML/PNG/CAP
+   link updates, and behavior tests. Read both product/change DOX before choosing
+   artifact paths. Put proposals in the owning CHG review package, not in the
+   product inventory or beside the CHG record.
 5. Include a final integration phase that confirms the CAP states current
    behaviour, the record check passes, affected tests pass, and the project gate
-   passes. Only that phase may archive the CHG.
+   passes. Its visual handoff gate confirms current canonical visuals for human
+   CAPs (honest `Primary surface: none` elsewhere) and stable-path retention of
+   review packages. Only that phase may archive the CHG.
 6. Hand the CHG path to `phased-plan-execution`.
 
 Use this phase-table shape:

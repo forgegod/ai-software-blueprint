@@ -1,7 +1,7 @@
 ---
 name: phased-plan-refactoring
 description: Use when splitting or resequencing active CAP/CHG work while preserving one repository-tracked progress authority per material request.
-version: 1.0.0
+version: 1.1.0
 author: AI Software Blueprint
 license: MIT
 metadata:
@@ -46,6 +46,9 @@ or create a second progress record just to preserve a personal todo list.
    prose from the source CHG; never duplicate live phase rows.
 5. Update the source CHG, new CHG, change index, and any affected CAP links in
    the same change. Keep each record's status and phase table internally valid.
+   Assign each review package exactly one owning CHG. If ownership changes, move
+   it to `docs/changes/reviews/CHG-<new-number>/` and repair README/owner/inbound
+   links; do not duplicate mutable progress or orphan the original package.
 6. Run the record validator and required document checks. Use
    `phased-plan-overview` to confirm that the next resumable record is clear;
    execute nothing until `phased-plan-execution` is invoked for that record.

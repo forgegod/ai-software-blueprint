@@ -23,6 +23,7 @@ A CAP claim must be specific enough for a test to falsify. Link existing archite
 # CAP-001 — Capability name
 
 **Status:** implemented
+**Primary surface:** none
 
 ## Behaviour
 
@@ -47,13 +48,25 @@ A CAP claim must be specific enough for a test to falsify. Link existing archite
 
 Allowed status values: `implemented`, `partial`, `retired`. `partial` states the implemented boundary precisely; it is not a substitute for a future-work list.
 
+`Primary surface` is required on every CAP, including partial or retired records. Use the literal `human` for a primary screen, pane, dialog, or multi-step visual interaction; use `none` otherwise, including headless capabilities. The validator rejects missing or other values rather than inferring a surface from prose. A human-facing CAP requires its own canonical wireframe; a `none` CAP has no manifest screen.
+
 ## Capability-local decisions
 
 Record a decision in the CAP only when it changes how a reader must use or understand the current behaviour. Put irreversible runtime, persistence, privacy, or observability decisions in `../design-decisions.md` instead.
 
 ## Wireframes
 
-Optional. The blueprint ships no `wireframes/` directory. When a product has a primary human-facing surface (a screen, pane, dialog, or multi-step interaction a person uses), activate the workflow: add `wireframes/generate.mjs` (the only editable screen-definition source), the `manifest.json` inventory, `index.html`, and the per-CAP `html/` and `exports/` artifacts, and link both outputs from the qualifying CAP's `## Links` section. Wireframes illustrate the intended interface and are never behaviour evidence; pre-implementation review artifacts stay under the active CHG and never enter the product manifest. `pnpm records:check` validates the wireframe manifest against the disk inventory whenever one exists.
+The blueprint has no primary visual surface and ships no `wireframes/` directory. A CAP declaring `human`, or the presence of that directory, activates the workflow; deleting the manifest does not disable validation.
+
+- `wireframes/generate.mjs` is the only editable canonical screen-definition source. It generates `manifest.json`, `index.html`, and `html/CAP-<number>-<slug>.html`; the project's renderer exports matching `exports/CAP-<number>-<slug>.png` files.
+- The manifest is an object with a `screens` array. Each screen has `id` (an existing human-facing CAP ID), `title` (non-empty text), `html`, `png`, and `viewport` with positive integer `width` and `height`. IDs are unique; HTML and PNG filenames have the same CAP ID and slug.
+- Every human-facing CAP has exactly one screen. The manifest and both flat artifact directories agree in both directions; missing, extra, or misnamed artifacts fail validation. `index.html` links every screen through an HTML anchor.
+- Each human-facing CAP links its HTML and PNG using relative Markdown links under the exact `## Links` heading. For a CAP in `capabilities/`, paths begin `../wireframes/html/` and `../wireframes/exports/`.
+- Proposal packages stay in `docs/changes/reviews/CHG-<number>/` under the [change-review contract](../changes/README.md#review-packages). CAPs never link review-package files; proposals never enter the product manifest.
+
+For new and existing CAPs, a material interaction change updates the canonical generator, regenerated HTML, rendered PNG, CAP links, and behavior tests in the same implementation slice. Do not promote a proposal by merely moving or renaming its files. Create the wireframe child DOX on first activation and index it in `AGENTS.md`.
+
+`pnpm records:check` enforces declarations, inventory, naming, and links. It does not render PNGs, establish source freshness, infer honest surface classification, or prove behavior. Run generation/rendering and inspect the affected visuals as explicit phase gates; wireframes never replace executable behavior evidence.
 
 ## Hermes integration
 

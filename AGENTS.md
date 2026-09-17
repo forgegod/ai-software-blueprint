@@ -103,6 +103,8 @@ Default section order:
 - **Material changes.** A material user-visible or operator-visible behaviour change updates the affected CAP, behaviour tests, and active CHG in the same change. A refactor with no observable behaviour change does not create CAP churn.
 - **Receipts.** A completed CHG moves to `docs/changes/archive/` only after its CAP and tests state the merged behaviour. Archived CHGs are implementation receipts, never the current product contract.
 - **Playbooks.** `skills/` ships optional, versioned agent playbooks for product records, capability wireframes, and self-contained CHG phase design, execution, overview, and restructuring. They are execution aids; the DOX contracts remain authoritative.
+- **Review packages.** Proposal assets and design notes belong in `docs/changes/reviews/CHG-<number>/`, linked from their owning CHG. They remain review-only receipts after closure, never current product references or a second progress authority.
+- **Canonical visual handoff.** Every CAP declares `Primary surface: human` or `none`. Human-facing CAPs require canonical generated HTML/PNG wireframes in `docs/product/wireframes/`, separate from proposals; new and existing surfaces are updated in the implementation slice.
 
 ## Architectural non-goals
 
@@ -128,13 +130,16 @@ An approved architecture change updates, in the same change:
 ## Product and change records
 
 - Read `docs/product/README.md` and `docs/changes/README.md` before creating, changing, splitting, or closing a CAP/CHG record.
-- A CAP with a primary human-facing surface links its static wireframe HTML and PNG from `docs/product/wireframes/` under `## Links` when the wireframe workflow is active. Wireframes are generated from `docs/product/wireframes/generate.mjs` and illustrate the interface; they are never behaviour evidence, and pre-implementation review artifacts stay under the active CHG. Optional repository agent playbooks under `skills/` do not replace these contracts.
+- Before choosing a visual artifact's destination, read both product and change DOX plus the wireframe child if present. Follow `docs/changes/README.md` for review ownership, placement, and retention, and `docs/product/README.md` for canonical generation and CAP links.
+- Phase design and closeout include the visual handoff: affected human-facing CAPs have current canonical HTML/PNG pairs; other CAPs declare `none`. Review packages never replace product wireframes or executable behaviour evidence.
+- Optional repository agent playbooks under `skills/` do not replace these contracts.
 
 ## Workspace verification
 
-- `pnpm records:check` validates product/change record structure, lifecycle, and references (and the wireframe manifest when one exists).
+- `pnpm records:check` validates record structure, lifecycle, references, review ownership, and required canonical wireframe inventory.
 - `pnpm test` runs the `node:test` suites that prove the record validator and the playbook packaging.
 - `.github/workflows/ci.yml` runs the same gate for GitHub pushes and pull requests.
+- Surface classification, rendering freshness, visual approval, and review freezing remain review gates; the validator checks structure, not those properties.
 
 ## Child DOX Index
 

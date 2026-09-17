@@ -124,6 +124,24 @@ test("skills/ packages a self-contained CAP/CHG phase workflow", async () => {
   assert.doesNotMatch(initialRoot, /AI Software Blueprint|CAP-00\d|CHG-00\d/);
 });
 
+test("skills package separate review storage and a visual handoff gate", async () => {
+  const sources = {};
+  for (const name of ["application-records", "capability-wireframes", "phased-plan-design", "phased-plan-execution"]) {
+    sources[name] = await readFile(path.join(skillsRoot, "software-development", name, "SKILL.md"), "utf8");
+  }
+  for (const name of ["application-records", "capability-wireframes"]) {
+    assert.match(sources[name], /docs\/changes\/reviews\/CHG-/);
+    assert.match(sources[name], /review-only/);
+    assert.match(sources[name], /README\.md/);
+  }
+  assert.match(sources["capability-wireframes"], /Primary surface/);
+  assert.match(sources["capability-wireframes"], /existing CAP|existing capabilit/i);
+  for (const name of ["phased-plan-design", "phased-plan-execution"]) {
+    assert.match(sources[name], /visual handoff/i);
+    assert.match(sources[name], /review package/i);
+  }
+});
+
 test("no repository skill carries credential markers", async () => {
   const files = await skillFiles(skillsRoot);
   const doxFiles = [

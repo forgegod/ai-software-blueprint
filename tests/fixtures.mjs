@@ -22,7 +22,7 @@ export function buildValidTree(root) {
   );
 
   const product = path.join(root, "docs", "product");
-  const changes = path.join(root, "changes");
+  const changes = path.join(root, "docs", "changes");
   fs.mkdirSync(path.join(product, "capabilities"), { recursive: true });
   fs.mkdirSync(path.join(path.join(changes, "active")), { recursive: true });
   fs.mkdirSync(path.join(path.join(changes, "archive")), { recursive: true });
@@ -40,7 +40,7 @@ export function buildValidTree(root) {
   write(
     root,
     "docs/product/capabilities/CAP-001-fixture-capability.md",
-    `# CAP-001 — Fixture capability\n\n**Status:** implemented\n\n## Behaviour\n\n- The fixture engine runs.\n\n## Implementation\n\n- \`src/engine.mjs\` — fixture engine.\n\n## Verification\n\n- \`src/engine.test.mjs\` — proves the fixture engine runs.\n\n## Related contracts\n\n- [Architecture](../../architecture.md)\n`,
+    `# CAP-001 — Fixture capability\n\n**Status:** implemented\n**Primary surface:** none\n\n## Behaviour\n\n- The fixture engine runs.\n\n## Implementation\n\n- \`src/engine.mjs\` — fixture engine.\n\n## Verification\n\n- \`src/engine.test.mjs\` — proves the fixture engine runs.\n\n## Related contracts\n\n- [Architecture](../../architecture.md)\n`,
   );
   write(
     root,
