@@ -16,4 +16,4 @@ Ship the maintenance framework only: the DOX hierarchy, the CAP/CHG record syste
 
 ### Consequences
 
-No runtime boundary checks, no database contracts, and no framework mandates exist here. A reference instantiation lives in `../ai-software-starter-rbac-db`. Re-introducing application code or technology direction into this repository is an architecture change requiring a new ADR.
+No runtime boundary checks, database contracts, framework mandates, or external reference-project dependencies exist here. Introducing application code or technology direction into this repository is an architecture change requiring a new ADR.

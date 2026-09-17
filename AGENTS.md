@@ -88,6 +88,7 @@ Default section order:
 
 - Documentation describes the current design only; Git history carries history and rationale that no longer affects the live contract.
 - Use explicit file markers such as `@file:` in communication rather than inferring file-path intent.
+- Keep blueprint files self-contained and project-independent: use generic examples and synthetic fixtures, not references to foreign projects or checkouts.
 
 ## Blueprint intent
 

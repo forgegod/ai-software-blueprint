@@ -50,5 +50,4 @@
 ## Out of scope
 
 - Application code, frameworks, persistence, and database runtimes (see [ADR-0001](../../design-decisions.md#adr-0001-ship-the-blueprint-without-application-code-or-technology-direction)).
-- The DocumentDB/OpenReplay aspects of the reference instantiation `../ai-software-starter-rbac-db`.
 - Wireframe artifacts: the workflow is documented and optional; it activates when a product has a primary human-facing surface.

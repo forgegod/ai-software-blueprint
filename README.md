@@ -11,7 +11,7 @@ The repository ships the structure and proves the machinery works:
 - **Agent playbooks** — optional, versioned execution aids under `skills/`: one-time adoption initialization, product-record lifecycle, capability wireframes, and self-contained CAP/CHG phase design, execution, overview, and restructuring.
 - **CI gate** — `.github/workflows/ci.yml` runs the record check and the test suite.
 
-This edition deliberately contains no application code, no database, and no framework: `../ai-software-starter-rbac-db` is the reference instantiation, a TanStack Start web app with DocumentDB persistence maintained under this exact framework.
+The blueprint deliberately contains no application code, database, or application framework. Adopting projects choose their own stack; no external reference project is required.
 
 ## Verification
 
