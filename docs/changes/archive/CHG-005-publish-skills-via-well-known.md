@@ -46,7 +46,7 @@
 **Cancellation:** The operator chose a dedicated skills repository instead of hosting
 from this blueprint. No blueprint-owned public endpoint was deployed, and the original
 phase gates were not completed. Continued migration is tracked by
-[CHG-006](../active/CHG-006-separate-skill-hosting.md). This cancelled receipt makes no implementation claim.
+[CHG-006](CHG-006-separate-skill-hosting.md). This cancelled receipt makes no implementation claim.
 
 - An application runtime, API, or custom registry service.
 - Publishing any secret, profile-local state, or repository control documents.

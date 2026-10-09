@@ -1,6 +1,6 @@
 # CHG-006 — Separate skill hosting from the blueprint
 
-**Status:** blocked
+**Status:** done
 **External request:** Direct operator request: Instead of modifing this project create a new project dedicated to host ai coding agent skills as proposed by https://hermes-agent.nousresearch.com/docs/developer-guide/creating-skills/#security-scanning using .well-known/ technique. Move all skills from this project to the new one and reference the installation of these skills. In order to create the new project at https://github.com/forgegod make suggestions to the operator and let the operator choose
 **Impacts:** CAP-003
 **Baseline:** `173dbf23efbb4e77ab03a78a8534503f10fd2404`
@@ -9,7 +9,7 @@
 | --- | --- | --- | --- |
 | 1 | Transfer complete packages and update ownership | done (eight packages and unchanged template verified; four handoff tests pass) | Complete source packages verified in the new repository; installation-handoff tests pass |
 | 2 | Publish and verify the external distribution | done (new repo b5fd719; CI and Pages pass; eight packages/nine live files verified; seven installs and one scanner block; 75 blueprint tests pass) | Public index and every advertised file match source; Hermes discovers eight packages, installs seven, and blocks the initializer as documented; blueprint record check and full tests pass |
-| 3 | Operator review and blueprint integration | pending | Operator approves and commits the blueprint migration; rerun record check and tests before archive |
+| 3 | Operator review and blueprint integration | done (b0835b2; `pnpm records:check` and `pnpm test` pass) | Operator approves and commits the blueprint migration; rerun record check and tests before archive |
 
 ## Phase 1 — Transfer complete packages and update ownership
 
@@ -43,14 +43,15 @@
 
 ## Phase 3 — Operator review and blueprint integration
 
-**Goal:** The blueprint migration is merged only after operator approval.
+**Goal:** The approved blueprint migration is committed, reverified, and retained as an archive receipt.
 
-1. Leave all blueprint changes unstaged and uncommitted, as explicitly requested.
-2. After operator approval and commit, rerun verification and archive this record with the resulting evidence.
+1. Commit the approved migration as `b0835b2`.
+2. Rerun `pnpm records:check` and `pnpm test` against the committed migration.
+3. Archive this record after both gates pass.
 
 **Verification gate:** Operator approves and commits the blueprint migration; rerun record check and tests before archive.
 
-**Blocker:** Awaiting operator review and integration. Implementation and publication are verified, but the blueprint migration intentionally remains unstaged/uncommitted. Do not archive this record as completed before that boundary.
+**Evidence:** Operator approval authorized commit `b0835b2`; `pnpm records:check` passed and `pnpm test` passed all 75 tests after the commit.
 
 ## Boundaries
 

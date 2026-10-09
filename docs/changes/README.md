@@ -69,14 +69,13 @@ this repository owns neither the skill packages nor their publisher.
 
 ## Current records
 
-| Change | Status |
-| --- | --- |
-| [CHG-006 — Separate skill hosting from the blueprint](active/CHG-006-separate-skill-hosting.md) | blocked (operator review/integration) |
+No change record is active.
 
 ## Archive
 
 | Change | Status |
 | --- | --- |
+| [CHG-006 — Separate skill hosting from the blueprint](archive/CHG-006-separate-skill-hosting.md) | done |
 | [CHG-005 — Publish skills via a well-known endpoint](archive/CHG-005-publish-skills-via-well-known.md) | cancelled |
 | [CHG-004 — Review artifact placement and wireframe handoff](archive/CHG-004-review-artifact-lifecycle.md) | done |
 | [CHG-003 — Project-goal README during initialization](archive/CHG-003-project-goal-readme-initialization.md) | done |
