@@ -60,20 +60,24 @@ A local implementation choice belongs in the affected CAP only if it constrains 
 
 ## Hermes integration
 
-The optional `application-records` and `phased-plan-*` skills drive this lifecycle
+The optional externally installed `application-records` and `phased-plan-*` skills drive this lifecycle
 for Hermes agents. `phased-plan-design` creates CHG phases; execution, overview,
 and refactoring operate on repository CHGs. When a material change uses this
 repository's records, the active CHG file is the tracked execution plan rather
-than a profile-private plan.
+than a profile-private plan. See the [root installation instructions](../../README.md#install-optional-agent-skills);
+this repository owns neither the skill packages nor their publisher.
 
 ## Current records
 
-No change record is active.
+| Change | Status |
+| --- | --- |
+| [CHG-006 — Separate skill hosting from the blueprint](active/CHG-006-separate-skill-hosting.md) | blocked (operator review/integration) |
 
 ## Archive
 
 | Change | Status |
 | --- | --- |
+| [CHG-005 — Publish skills via a well-known endpoint](archive/CHG-005-publish-skills-via-well-known.md) | cancelled |
 | [CHG-004 — Review artifact placement and wireframe handoff](archive/CHG-004-review-artifact-lifecycle.md) | done |
 | [CHG-003 — Project-goal README during initialization](archive/CHG-003-project-goal-readme-initialization.md) | done |
 | [CHG-002 — Initialize an adopted blueprint](archive/CHG-002-initialize-adopted-blueprint.md) | done |

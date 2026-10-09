@@ -21,7 +21,7 @@ Own repository-tracked implementation progress for requested changes without bec
 - Both directories contain only flat CHG record files. Review packages belong in `reviews/CHG-<number>/` with a review-only README linked from the owning CHG; see `README.md` for labeling, retention, and removal rules.
 - Review Markdown is link-checked but never parsed as a CHG. Packages are not a second progress authority and cannot replace CAP wireframes.
 - A CHG is complete only after affected CAPs and tests describe the merged behaviour. Archive it rather than using it to describe the repository.
-- The optional phase-workflow skills operate on the CHG phase table; they do not create a second mutable progress authority.
+- The optional externally installed phase-workflow skills operate on the CHG phase table; they do not create a second mutable progress authority. Skill source and distribution are owned by the dedicated skills repository, not this tree.
 
 ## Work Guidance
 

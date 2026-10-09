@@ -70,19 +70,13 @@ For new and existing CAPs, a material interaction change updates the canonical g
 
 ## Hermes integration
 
-This repository ships optional agent playbooks under `../../skills/`. They include
-the CAP/CHG lifecycle, capability wireframes, and a self-contained phase workflow:
-design, execute, inspect, or restructure an active CHG without a profile-private
-progress plan. Hermes discovers them only when the checkout's skill directory is
-configured as an external skill directory, for example:
-
-```yaml
-skills:
-  external_dirs:
-    - ${BLUEPRINT_ROOT}/skills
-```
-
-Set `BLUEPRINT_ROOT` to this checkout before starting Hermes. The repository contracts remain authoritative even when no agent loads a skill.
+Optional CAP/CHG lifecycle, capability-wireframe, and phase-workflow skills are
+owned and published by [forgegod/ai-coding-agent-skills](https://github.com/forgegod/ai-coding-agent-skills),
+not bundled here. Follow the [root installation instructions](../../README.md#install-optional-agent-skills).
+Seven packages use normal scanned installation; the initializer's complete DOX
+template triggers a community-scanner block and requires separate operator-reviewed
+manual installation. Installed skills do not create a profile-private progress
+authority. This repository's contracts remain authoritative even when no skill is loaded.
 
 ## Verification
 

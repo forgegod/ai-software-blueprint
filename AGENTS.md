@@ -23,11 +23,15 @@ Do not rely on memory. Re-read the applicable DOX chain in the current session b
 ## Adoption initialization
 
 Only when an operator explicitly asks to initialize a copied blueprint for a
-real project, load `skills/software-development/blueprint-initialization` before
-ordinary project work. It replaces this populated blueprint rail with the
+real project, load the installed `blueprint-initialization` skill before
+ordinary project work. See README.md for its separate operator-reviewed installation
+from `forgegod/ai-coding-agent-skills`; stop if it is unavailable rather than assuming
+a local source copy. It replaces this populated blueprint rail with the
 initial DOX template, establishes project-owned contracts, removes blueprint
 proof records, and then removes its own one-time routing. Do not initialize this
-blueprint repository merely because it contains the framework.
+blueprint repository merely because it contains the framework. Preserve the shared
+profile installation; only target-project-owned one-time routing or legacy copies
+are removed during adoption.
 
 ## Update After Editing
 
@@ -88,7 +92,7 @@ Default section order:
 
 - Documentation describes the current design only; Git history carries history and rationale that no longer affects the live contract.
 - Use explicit file markers such as `@file:` in communication rather than inferring file-path intent.
-- Keep blueprint files self-contained and project-independent: use generic examples and synthetic fixtures, not references to foreign projects or checkouts.
+- Keep blueprint files project-independent: use generic examples and synthetic fixtures, not foreign product code or checkouts. The explicitly adopted optional skill-distribution dependency is documented through public installation references; blueprint verification never requires a sibling checkout or remote service.
 
 ## Blueprint intent
 
@@ -102,7 +106,7 @@ Default section order:
 - **Change progress.** `docs/changes/active/CHG-*.md` is the single repository authority for progress on a material requested change. Tickets remain the request/discussion authority, not the implementation-progress or current-behaviour authority.
 - **Material changes.** A material user-visible or operator-visible behaviour change updates the affected CAP, behaviour tests, and active CHG in the same change. A refactor with no observable behaviour change does not create CAP churn.
 - **Receipts.** A completed CHG moves to `docs/changes/archive/` only after its CAP and tests state the merged behaviour. Archived CHGs are implementation receipts, never the current product contract.
-- **Playbooks.** `skills/` ships optional, versioned agent playbooks for product records, capability wireframes, and self-contained CHG phase design, execution, overview, and restructuring. They are execution aids; the DOX contracts remain authoritative.
+- **Playbooks.** `forgegod/ai-coding-agent-skills` owns optional skill source, packaging, tests, and public distribution. This blueprint documents installation but bundles no skill source or publisher. Skills are execution aids; the DOX contracts remain authoritative. Seven skills use normal scanned installation; the initializer requires separate operator review/manual installation because its complete DOX template triggers the community scanner.
 - **Review packages.** Proposal assets and design notes belong in `docs/changes/reviews/CHG-<number>/`, linked from their owning CHG. They remain review-only receipts after closure, never current product references or a second progress authority.
 - **Canonical visual handoff.** Every CAP declares `Primary surface: human` or `none`. Human-facing CAPs require canonical generated HTML/PNG wireframes in `docs/product/wireframes/`, separate from proposals; new and existing surfaces are updated in the implementation slice.
 
@@ -115,6 +119,7 @@ These shapes are out of scope until the live contract is deliberately changed:
 - No second progress system: tickets, issue trackers, or private plans never replace the active CHG as progress authority.
 - No shipped wireframe artifacts by default: the wireframe workflow activates when a product has a primary human-facing surface (see `docs/product/README.md` → Wireframes).
 - No session, role, or product data in this repository.
+- No skill-hosting or deployment infrastructure: optional skill publication belongs to the dedicated skills repository.
 
 ## Architecture change control
 
@@ -132,12 +137,12 @@ An approved architecture change updates, in the same change:
 - Read `docs/product/README.md` and `docs/changes/README.md` before creating, changing, splitting, or closing a CAP/CHG record.
 - Before choosing a visual artifact's destination, read both product and change DOX plus the wireframe child if present. Follow `docs/changes/README.md` for review ownership, placement, and retention, and `docs/product/README.md` for canonical generation and CAP links.
 - Phase design and closeout include the visual handoff: affected human-facing CAPs have current canonical HTML/PNG pairs; other CAPs declare `none`. Review packages never replace product wireframes or executable behaviour evidence.
-- Optional repository agent playbooks under `skills/` do not replace these contracts.
+- Optional installed agent playbooks do not replace these contracts.
 
 ## Workspace verification
 
 - `pnpm records:check` validates record structure, lifecycle, references, review ownership, and required canonical wireframe inventory.
-- `pnpm test` runs the `node:test` suites that prove the record validator and the playbook packaging.
+- `pnpm test` runs the `node:test` suites that prove the record validator and the documented external-skill installation handoff. Skill-package behavior is verified in the dedicated skills repository, not here.
 - `.github/workflows/ci.yml` runs the same gate for GitHub pushes and pull requests.
 - Surface classification, rendering freshness, visual approval, and review freezing remain review gates; the validator checks structure, not those properties.
 
@@ -148,7 +153,7 @@ An approved architecture change updates, in the same change:
 | `docs/AGENTS.md` | Architecture, product, and change documentation. | Blueprint design, current-capability, or implementation-progress documentation. |
 | `scripts/AGENTS.md` | Record-validation script.                  | The product-record validator, its behaviour, or its test fixtures.                |
 | `.github/AGENTS.md` | Repository-hosted quality automation.     | GitHub Actions workflows or CI policy.                                             |
-| `skills/AGENTS.md` | Versioned optional agent playbooks.        | Repository-shipped agent workflows (adoption initialization, product records, CHG phases, capability wireframes). |
+
 
 ### Root-owned cross-cutting files
 

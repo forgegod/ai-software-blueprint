@@ -20,7 +20,7 @@ Own the repository's concise, current-state account of material product behaviou
 - Capability-local decisions belong in the CAP; irreversible or cross-cutting decisions belong in `../design-decisions.md`.
 - Every CAP declares `Primary surface: human` or `none`. Human-facing CAPs require canonical HTML/PNG links under `## Links`; CAPs must not link CHG review packages.
 - Follow `README.md` for manifest activation and schema, inventory completeness, and the implementation handoff for new and existing CAPs. Generator and renderer freshness remain review gates, not inventory checks.
-- The optional phased-plan skills execute material work through its active CHG; the CAP remains the current-state contract rather than a phase-status surface.
+- Optional externally installed phased-plan skills execute material work through its active CHG; the CAP remains the current-state contract rather than a phase-status surface. This repository documents installation handoff, not external package implementation or hosting behavior.
 
 ## Work Guidance
 
