@@ -71,12 +71,12 @@ For new and existing CAPs, a material interaction change updates the canonical g
 ## Hermes integration
 
 Optional CAP/CHG lifecycle, capability-wireframe, and phase-workflow skills are
-owned and published by [forgegod/ai-coding-agent-skills](https://github.com/forgegod/ai-coding-agent-skills),
-not bundled here. Follow the [root installation instructions](../../README.md#install-optional-agent-skills).
-Seven packages use normal scanned installation; the initializer's complete DOX
-template triggers a community-scanner block and requires separate operator-reviewed
-manual installation. Installed skills do not create a profile-private progress
-authority. This repository's contracts remain authoritative even when no skill is loaded.
+owned and published by [forgegod/ai-coding-agent-skills](https://github.com/forgegod/ai-coding-agent-skills).
+Follow the [root installation instructions](../../README.md#install-optional-agent-skills).
+The copied local initializer is for one-time migration only and is removed after
+initialization; it is not an externally installed CAP/CHG workflow. Installed
+skills do not create a profile-private progress authority. This repository's
+contracts remain authoritative even when no skill is loaded.
 
 ## Verification
 

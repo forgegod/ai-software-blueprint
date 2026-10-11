@@ -8,7 +8,7 @@ The repository ships the structure and proves the machinery works:
 - **Product records** — `docs/product/capabilities/CAP-*.md`, the current behavioural contract with executable evidence.
 - **Change records** — `docs/changes/active|archive/CHG-*.md`, the single progress authority for material changes.
 - **Record validator** — `scripts/check-product-records.mjs`, dependency-free structure, lifecycle, and reference enforcement.
-- **Agent playbook handoff** — installation references for optional skills owned by [AI Coding Agent Skills](https://github.com/forgegod/ai-coding-agent-skills). This blueprint owns no skill source, package publisher, or hosting workflow.
+- **Agent playbook handoff** — installation references for optional generic skills owned by [AI Coding Agent Skills](https://github.com/forgegod/ai-coding-agent-skills), plus a local one-time initializer carried only for blueprint migration.
 - **CI gate** — `.github/workflows/ci.yml` runs the record check and the test suite.
 
 The blueprint deliberately contains no application code, database, or application framework. Adopting projects choose their own stack; no external reference project is required.
@@ -26,12 +26,11 @@ pnpm test
 1. Copy the framework into the real project. Preserve existing source and project
    instructions; do not treat this repository's CAPs, CHGs, README, package
    scripts, CI, or tests as the product's truth.
-2. Install the optional skills below, including the separately reviewed initializer
-   if adoption automation is wanted. Tell the project's agent to initialize the copy
-   and provide the project's goal:
+2. Tell the project's agent to read the copied local initializer and initialize the
+   copy. Provide the project's goal:
 
    ```text
-   Initialize this AI Software Blueprint for this project.
+   Read skills/software-development/blueprint-initialization/SKILL.md, then initialize this AI Software Blueprint for this project.
    Project goal: <one concise, user- or operator-visible outcome>.
    ```
 
@@ -40,9 +39,8 @@ pnpm test
    that goal. The new README states the project purpose, intended users, actual
    setup/run/verification commands, and current documentation links.
 4. It removes the blueprint proof records and incompatible tooling, retains the
-   generic DOX/CAP/CHG contracts and installed skills that fit the project. It removes
-   only target-project-owned one-time routing and legacy copies, never a shared
-   profile installation.
+   generic DOX/CAP/CHG contracts and optional installed skills that fit the project,
+   then removes its copied local package and one-time routing.
    Future agents continue from the project-owned DOX contracts and README.
 
 If the goal cannot be inferred from the request, source, or current documents,
@@ -74,13 +72,12 @@ For a named profile, use `-p`; for example:
 hermes -p hermes-dev skills install well-known:https://forgegod.github.io/ai-coding-agent-skills/.well-known/skills/application-records --category software-development
 ```
 
-The eighth package, `blueprint-initialization`, is published with its complete
-DOX template, but the current Hermes community scanner marks it **dangerous**
-because it requires updates to project AGENTS.md. Follow the dedicated repository's
-[operator-reviewed manual initializer installation](https://github.com/forgegod/ai-coding-agent-skills#manual-initializer-installation)
-only after reviewing both the skill and template. Do not bypass the block with
-`--force`, hide the template, or weaken the DOX contract. Manual installation has
-no hub scanner approval or hub update tracking.
+`blueprint-initialization` is intentionally not published. Its complete local
+package is copied with this repository at
+`skills/software-development/blueprint-initialization/`, because its required
+project-instruction updates are blocked by the external community scanner. Read it
+only for an explicit migration request; do not install, publish, conceal, or bypass
+a scanner to use it.
 
 All skills remain optional execution aids subordinate to this project's DOX.
 Installations become available in new agent sessions; existing local edits must

@@ -11,7 +11,7 @@ It ships no application code, no framework, and no persistence runtime. The prod
 - The **DOX hierarchy**: root `AGENTS.md` plus child contracts that stay binding at every depth. The hierarchy is the structure an AI coding agent complies with on every change.
 - The **record system**: CAP capability contracts for current behaviour, CHG change records for progress, and CHG-owned review packages kept apart from canonical product wireframes.
 - The **record validator**: a dependency-free `node` script that enforces record structure, lifecycle placement, reference integrity, and local link integrity.
-- The **agent-skill installation handoff**: documented references to optional packages from [forgegod/ai-coding-agent-skills](https://github.com/forgegod/ai-coding-agent-skills). That dedicated repository owns skill source, packaging evidence, and publication; this blueprint owns no skill tree or publisher.
+- The **agent-skill installation handoff**: documented references to optional generic packages from [forgegod/ai-coding-agent-skills](https://github.com/forgegod/ai-coding-agent-skills), plus the local `skills/software-development/blueprint-initialization/` package used only while migrating a copied blueprint. The dedicated repository owns generic skill source, packaging evidence, and publication; this blueprint publishes no skills.
 - The **quality gate**: local scripts and a credential-free CI workflow.
 
 The blueprint's own product surface is that machinery: its CAPs describe the record-validation and lifecycle pipeline, and the `node:test` suites under `tests/` prove it.
@@ -50,12 +50,12 @@ pnpm test
 
 ## Adoption
 
-Copying is not initialization. Install the optional skills through the
-[root installation handoff](../README.md#install-optional-agent-skills). The initializer
-requires separate operator review/manual installation because its complete DOX
-template is blocked by the current community scanner. After the copy, explicitly
-ask the agent to initialize the blueprint for the real project. The installed
-one-time initializer performs this boundary:
+Copying is not initialization. Install optional generic skills through the
+[root installation handoff](../README.md#install-optional-agent-skills). The
+initializer is already in the copied local package because its complete DOX
+template is blocked by the external community scanner. After the copy, explicitly
+ask the agent to read that local skill and initialize the blueprint for the real
+project. The local one-time initializer performs this boundary:
 
 1. Start the target root from the initial DOX template, scan the real source
    tree, and fill its project guidance, verification commands, and Child DOX
@@ -76,7 +76,6 @@ one-time initializer performs this boundary:
    workflow: add `docs/product/wireframes/` (generator, manifest, index,
    HTML/PNG pairs) and link them from the qualifying CAPs. Keep proposal reviews
    in CHG-owned packages under `docs/changes/reviews/`, not in the product tree.
-6. Remove target-project-owned one-time initialization routing, any verified legacy
-   local package copy, and tests that require it once the target has a project-owned
-   DOX tree. Preserve shared profile installations. Future agents continue through
-   initialized contracts and optional installed generic skills.
+6. Remove the copied local initialization package, its one-time routing, and tests
+   that require it once the target has a project-owned DOX tree. Future agents
+   continue through initialized contracts and optional installed generic skills.

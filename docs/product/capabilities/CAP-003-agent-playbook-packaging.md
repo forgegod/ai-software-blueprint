@@ -1,28 +1,29 @@
-# CAP-003 — External agent-skill installation handoff
+# CAP-003 — Agent-skill migration handoff
 
 **Status:** implemented
 **Primary surface:** none
 
 ## Behaviour
 
-- README documents normal well-known installation for seven optional engineering skills and a named-profile example.
-- README names the separately published eighth package, blueprint-initialization, and links operator-reviewed manual installation because its complete DOX template is blocked by the current community scanner. It does not recommend a scanner bypass.
-- This repository contains no skill source tree, endpoint generator, or publishing workflow. Package implementation and distribution are owned by the dedicated skills repository.
-- Adoption routing loads an installed initializer only on an explicit operator request, stops if unavailable, and preserves shared profile installations.
+- README documents normal well-known installation for seven optional generic engineering skills and a named-profile example.
+- A copied blueprint contains `skills/software-development/blueprint-initialization/` with its complete DOX template. It is read only for an explicit migration request, then removed with its root routing from the initialized target project.
+- The initializer is not published or installed from the dedicated skills repository because the current community scanner blocks its required project-instruction updates. The repository does not bypass or conceal that boundary.
+- This repository has no generic-skill endpoint generator or publishing workflow. Generic package implementation and distribution are owned by the dedicated skills repository.
 - Installed skills remain execution aids subordinate to project DOX. Local verification does not fetch external packages or require a sibling checkout.
 
 ## Implementation
 
-- `README.md` — public installation commands, scanner exception, and adoption handoff.
-- `AGENTS.md` — external source ownership and explicit adoption routing.
+- `README.md` — public generic-skill installation commands and local migration handoff.
+- `AGENTS.md` — external generic-skill ownership and explicit local adoption routing.
+- `skills/software-development/blueprint-initialization/` — local migration package and initial root-DOX template.
 
 ## Rules and boundaries
 
-- The dedicated [AI Coding Agent Skills](https://github.com/forgegod/ai-coding-agent-skills) repository owns package tests and hosting evidence. This blueprint's handoff evidence does not prove remote package safety, availability, or behavior.
+- The dedicated [AI Coding Agent Skills](https://github.com/forgegod/ai-coding-agent-skills) repository owns generic package tests and hosting evidence. This blueprint's handoff evidence does not prove remote package safety, availability, or behavior.
 
 ## Verification
 
-- `tests/skill-installation.test.mjs` — absence of local source/publisher, seven normal installation references, named-profile syntax, explicit initializer exception, and current ownership/routing boundaries.
+- `tests/skill-installation.test.mjs` — local initializer package and routing, seven normal generic installation references, named-profile syntax, and current ownership boundaries.
 
 ## Related contracts
 

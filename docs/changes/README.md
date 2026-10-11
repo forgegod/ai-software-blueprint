@@ -75,6 +75,7 @@ No change record is active.
 
 | Change | Status |
 | --- | --- |
+| [CHG-007 — Localize the blueprint initializer](archive/CHG-007-localize-blueprint-initializer.md) | done |
 | [CHG-006 — Separate skill hosting from the blueprint](archive/CHG-006-separate-skill-hosting.md) | done |
 | [CHG-005 — Publish skills via a well-known endpoint](archive/CHG-005-publish-skills-via-well-known.md) | cancelled |
 | [CHG-004 — Review artifact placement and wireframe handoff](archive/CHG-004-review-artifact-lifecycle.md) | done |
